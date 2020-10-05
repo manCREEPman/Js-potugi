@@ -1,3 +1,4 @@
+// функция принимает элемент, полученный через querySelector и возвращает его положение на экране
 function getCoords(elem) {
     let box = elem.getBoundingClientRect();
     return {
@@ -6,6 +7,9 @@ function getCoords(elem) {
     };
 }
 
+// демо-функция, принимает элемент и максимальную высоту на странице, куда его подняли, 
+// (должна была поэтапно "приземлить" элемент на рамочку, а затем поднять его на высоту в половину меньшую начальной, и так 
+// раз за разом отрисовать все отскоки, пока высота подъёма фигуры не будет сравнима с размерами элемента)
 function ballPhysics(element, maxHeight) {
 
     let elementStyle = getComputedStyle(element);
@@ -56,6 +60,8 @@ ball.onmousedown = function (event) {
 
     moveAt(event);
 
+
+    // функция перемещения элемента за мышкой
     function moveAt(event) {
         let xDelta = event.clientX - shiftX;
         let yDelta = event.clientY - shiftY;
@@ -96,4 +102,7 @@ ball.ondragend = function(){
 /*
 
 как лучше всего обрабатывать падение циклом или как-либо поэтапно
-как при падении выключить маусмув
+как при обработке падения выключить события перемещения мыши
+
+
+*/
