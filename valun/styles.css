@@ -24,3 +24,11 @@
     height: 50px;
     border-radius: 50%;
 }
+
+
+#line{
+    display: inline-block;
+    width: 100%;
+    position: absolute;
+    top: 827px;
+}

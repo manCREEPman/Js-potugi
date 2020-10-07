@@ -1,108 +1,69 @@
-// функция принимает элемент, полученный через querySelector и возвращает его положение на экране
-function getCoords(elem) {
-    let box = elem.getBoundingClientRect();
-    return {
-        top: box.top + pageYOffset,
-        left: box.left + pageXOffset
-    };
+const ball = {
+    object: document.querySelector(".ball"),
+    ballCompStyle: getComputedStyle(document.querySelector(".ball")),
+    frequency: 300,
+    speed: 10,
+    posX: 0,
+    posY: 0
 }
 
-// демо-функция, принимает элемент и максимальную высоту на странице, куда его подняли, 
-// (должна была поэтапно "приземлить" элемент на рамочку, а затем поднять его на высоту в половину меньшую начальной, и так 
-// раз за разом отрисовать все отскоки, пока высота подъёма фигуры не будет сравнима с размерами элемента)
-function ballPhysics(element, maxHeight) {
-
-    let elementStyle = getComputedStyle(element);
-    let elementRadius = parseInt(elementStyle.width);
-    let bottomBorder = parseInt(screenStyle.height) - parseInt(screenStyle.borderWidth) - elementRadius;
-    while (maxHeight > elementRadius) {
-        while (parseInt(element.style.top) < bottomBorder) {
-            let temp = parseInt(elementStyle.top);
-            element.style.top = temp + speed + "px";
-            console.log(element.style.top);
-        }
-        maxHeight /= 2;
-        while (parseInt(element.style.top) > maxHeight) {
-            let temp = parseInt(elementStyle.top);
-            element.style.top = temp - speed + "px";
-            console.log(element.style.top);
-        }
-    }
+const field = {
+    object: document.querySelector(".screen-field"),
+    fieldCompStyle: getComputedStyle(document.querySelector(".screen-field"))
 }
 
 
-let ball = document.querySelector(".ball");
-let screen = document.querySelector(".screen-field");
-let screenStyle = getComputedStyle(screen);
-let speed = 10;
-let maxHeight = 0;
-
-
-console.log(ball);
-
-ball.onmousedown = function (event) {
-    let coords = getCoords(ball);
-    console.log("coords", coords);
-
-    
-
-    let shiftX = event.clientX - coords.left;
-    let shiftY = event.clientY - coords.top;
-
-    console.log("shiftx, shifty", shiftX, shiftY);
-
-    let ballStyle = getComputedStyle(ball);
-
-    let topBorder = parseInt(screenStyle.borderWidth);
-    let rightBorder = parseInt(screenStyle.width) - parseInt(screenStyle.borderWidth) - parseInt(ballStyle.width);
-    let bottomBorder = parseInt(screenStyle.height) - parseInt(screenStyle.borderWidth) - parseInt(ballStyle.width);
-    let leftBorder = topBorder;
-
-    moveAt(event);
-
-
-    // функция перемещения элемента за мышкой
-    function moveAt(event) {
-        let xDelta = event.clientX - shiftX;
-        let yDelta = event.clientY - shiftY;
-        maxHeight = yDelta;
-        console.log("xDelta", xDelta);
-        console.log("yDelta", yDelta);
-
-        if (xDelta > leftBorder && xDelta < rightBorder) {
-            ball.style.left = xDelta + 'px';
-        }
-        if (yDelta > topBorder && yDelta < bottomBorder) {
-            ball.style.top = yDelta + 'px';
-        }
+function isBallNearGround(){
+    if (ball.posY >= field.bottomBorder) {
+        console.log("Ball near ground");
+        return true;
     }
-
-    document.onmousemove = function (event) {
-        moveAt(event);
+    else{
+        console.log("Ball in air");
+        return false;
     };
+}
 
-    ball.onmouseup = function () {
-        //        document.onmousemove = null;
-//        ballPhysics(ball, maxHeight);
-        ball.onmouseup = null;
+
+function changeBallCoords(x, y){
+    ball.posX = x;
+    ball.posY = y;
+}
+
+
+function placeBall(){
+    if (ball.posY > field.topBorder && ball.posY < field.bottomBorder && 
+        ball.posX > field.leftBorder && ball.posX < field.rightBorder){
         
-    };
-
-}
-
-//ball.ondragstart = function () {
-//    return false;
-//};
-
-ball.ondragend = function(){
-    ballPhysics(ball, maxHeight);
+        ball.object.style.left = ball.posX + "px";
+        ball.object.style.top = ball.posY + "px";
+    }
 }
 
 
-/*
+function fallingGravitation(){
+    if (!isBallNearGround()){
+        console.log("working");
+        ball.posY += ball.speed;
+        if (ball.posY > field.bottomBorder) ball.posY = field.bottomBorder;
+        placeBall();
+    }
+}
 
-как лучше всего обрабатывать падение циклом или как-либо поэтапно
-как при обработке падения выключить события перемещения мыши
+
+function initFieldBorders(){
+    field['topBorder'] = parseInt(field.fieldCompStyle.borderWidth);
+    field['rightBorder'] = parseInt(field.fieldCompStyle.width) - parseInt(ball.ballCompStyle.width) - parseInt(field.fieldCompStyle.borderWidth);
+    field['bottomBorder'] = parseInt(field.fieldCompStyle.height) - parseInt(ball.ballCompStyle.width) - parseInt(field.fieldCompStyle.borderWidth);
+    field['leftBorder'] = parseInt(field.fieldCompStyle.borderWidth);
+}
+
+function initBallPosition(){
+    ball.posX = parseInt(ball.ballCompStyle.left);
+    ball.posY = parseInt(ball.ballCompStyle.top);
+}
 
 
-*/
+initBallPosition();
+initFieldBorders();
+eventTimer = setInterval(fallingGravitation, 100);
