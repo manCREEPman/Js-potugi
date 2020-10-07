@@ -27,8 +27,9 @@
 
 
 #line{
-    display: inline-block;
-    width: 100%;
+    visibility: hidden;
+    display: block;
+    width: calc(100% - 8px);
     position: absolute;
     top: 827px;
 }

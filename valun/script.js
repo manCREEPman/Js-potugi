@@ -32,18 +32,14 @@ function changeBallCoords(x, y){
 
 
 function placeBall(){
-    if (ball.posY > field.topBorder && ball.posY < field.bottomBorder && 
-        ball.posX > field.leftBorder && ball.posX < field.rightBorder){
-        
-        ball.object.style.left = ball.posX + "px";
-        ball.object.style.top = ball.posY + "px";
-    }
+    ball.object.style.left = ball.posX + "px";
+    ball.object.style.top = ball.posY + "px";
 }
 
 
 function fallingGravitation(){
     if (!isBallNearGround()){
-        console.log("working");
+        console.log(ball.posY);
         ball.posY += ball.speed;
         if (ball.posY > field.bottomBorder) ball.posY = field.bottomBorder;
         placeBall();
@@ -66,4 +62,4 @@ function initBallPosition(){
 
 initBallPosition();
 initFieldBorders();
-eventTimer = setInterval(fallingGravitation, 100);
+eventTimer = setInterval(fallingGravitation, 200);
