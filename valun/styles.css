@@ -1,35 +1,25 @@
 *,
 *:after,
 *:before {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-
 .screen-field {
-    height: 100vh;
-    width: 100vw;
-    border: solid black 4px;
-    background-color: aqua;
+  height: 100vh;
+  width: 100vw;
+  border: solid black 4px;
+  background-color: aqua;
 }
 
 .ball {
-    display: inline-block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    background-color: red;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-}
-
-
-#line{
-    visibility: hidden;
-    display: block;
-    width: calc(100% - 8px);
-    position: absolute;
-    top: 827px;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: red;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
