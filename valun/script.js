@@ -11,7 +11,7 @@ const ball = {
   fallStartTime: null,
   posX: 0,
   posY: 0,
-  onmousedown: false
+  mousedown: false
 };
 
 const field = {
@@ -110,36 +110,36 @@ function initBallPosition() {
   ball.posY = parseInt(ball.ballCompStyle.top);
 }
 
-
 function moveBallByMouse(event){
   let shiftX = event.clientX - ball.object.getBoundingClientRect().left;
   let shiftY = event.clientY - ball.object.getBoundingClientRect().top;
   let newX = event.pageX - shiftX;
   let newY = event.pageY - shiftY;
-  console.log("ball posX", ball.posX, "newX", newX);
-  console.log("ball posY", ball.posY, "newY", newY);
+  
   if (newX >= field.leftBorder && newX <= field.rightBorder) ball.posX = newX;
   if (newY >= field.topBorder && newY <= field.bottomBorder) ball.posY = newY;
+  console.log("ball posX", ball.posX, "newX", newX);
+  console.log("ball posY", ball.posY, "newY", newY);
   placeBall();
 }
 
 ball.object.onmousedown = function (event) {
   console.log("on mouse down");
-  ball.onmousedown = true;
+  ball.mousedown = true;
   moveBallByMouse(event);
-  ball.object.addEventListener('mousemove', ballMouseMove);
+  document.addEventListener('mousemove', ballMouseMove);
   clearInterval(eventTimer);
 }
 
 function ballMouseMove(event){
   console.log("on mouse move");
-  moveBallByMouse(event);
+  if (ball.mousedown) moveBallByMouse(event);
 }
 
 ball.object.onmouseup = function(event){
   console.log("on mouse up");
-  ball.object.removeEventListener('mousemove', ballMouseMove);
-  ball.onmousedown = false;
+  document.removeEventListener('mousemove', ballMouseMove);
+  ball.mousedown = false;
   ball.direction = 1;
   ball.currentSpeed = ball.speed;
   eventTimer = setInterval(fallingGravitation, 100);
