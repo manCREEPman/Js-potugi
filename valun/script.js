@@ -1,16 +1,17 @@
 const ball = {
   object: document.querySelector(".ball"),
   ballCompStyle: getComputedStyle(document.querySelector(".ball")),
-  frequency: 300,
+  frequency: 100,
   speed: 10,
   currentSpeed: 10,
   fallState: false,
   fallStartHeight: 0,
-  ballEndHeight: 0,
   direction: 1,
   fallStartTime: null,
   posX: 0,
   posY: 0,
+  shiftX: 0,
+  shiftY: 0,
   mousedown: false
 };
 
@@ -83,13 +84,13 @@ function fallingGravitation() {
     if (ball.posY >= field.bottomBorder) ball.posY = field.bottomBorder;
     placeBall();
   }
-  console.log("===========================")
+  /* console.log("===========================")
   console.log("speed", ball.currentSpeed);
   console.log("direction", ball.direction);
   console.log("ball fall state", ball.fallState);
   console.log("bounce height", ball.fallStartHeight);
   console.log("current height", ball.posY);
-  console.log("delta", field.bottomBorder - ball.fallStartHeight);
+  console.log("delta", field.bottomBorder - ball.fallStartHeight); */
 }
 
 function initFieldBorders() {
@@ -111,45 +112,48 @@ function initBallPosition() {
 }
 
 function moveBallByMouse(event){
-  let shiftX = event.clientX - ball.object.getBoundingClientRect().left;
-  let shiftY = event.clientY - ball.object.getBoundingClientRect().top;
-  let newX = event.pageX - shiftX;
-  let newY = event.pageY - shiftY;
-  
-  if (newX >= field.leftBorder && newX <= field.rightBorder) ball.posX = newX;
-  if (newY >= field.topBorder && newY <= field.bottomBorder) ball.posY = newY;
-  console.log("ball posX", ball.posX, "newX", newX);
-  console.log("ball posY", ball.posY, "newY", newY);
+  let newX = event.clientX - ball.shiftX;
+  let newY = event.clientY - ball.shiftY;
+  if (newX >= field.leftBorder && newX <= field.rightBorder && newX != ball.posX) {
+    ball.posX = newX;
+  }
+  if (newY >= field.topBorder && newY <= field.bottomBorder && newY != ball.posY){
+    ball.posY = newY;
+  } 
   placeBall();
 }
 
-ball.object.onmousedown = function (event) {
-  console.log("on mouse down");
+function ballMouseDown(event){
   ball.mousedown = true;
+  ball.shiftX = event.clientX - ball.posX;
+  ball.shiftY = event.clientY - ball.posY;
   moveBallByMouse(event);
+  placeBall();
   document.addEventListener('mousemove', ballMouseMove);
   clearInterval(eventTimer);
 }
 
 function ballMouseMove(event){
-  console.log("on mouse move");
   if (ball.mousedown) moveBallByMouse(event);
 }
 
-ball.object.onmouseup = function(event){
-  console.log("on mouse up");
+function ballMouseUp(event){
   document.removeEventListener('mousemove', ballMouseMove);
   ball.mousedown = false;
   ball.direction = 1;
   ball.currentSpeed = ball.speed;
-  eventTimer = setInterval(fallingGravitation, 100);
+  eventTimer = setInterval(fallingGravitation, ball.frequency);
 }
+
+ball.object.addEventListener('mousedown', ballMouseDown);
+document.addEventListener('mouseup', ballMouseUp);
+
 
 initBallPosition();
 initFieldBorders();
-let eventTimer = setInterval(fallingGravitation, 100);
+let eventTimer = setInterval(fallingGravitation, ball.frequency);
 
 /*
-    перетаскивание
+    табличка со значениями
     внешние объекты
 */
