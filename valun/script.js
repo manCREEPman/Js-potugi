@@ -12,7 +12,7 @@ const ball = {
   posY: 0,
   shiftX: 0,
   shiftY: 0,
-  mousedown: false
+  mousedown: false,
 };
 
 const field = {
@@ -26,9 +26,8 @@ function isBallNearGround() {
 }
 
 function isBallNearBounceHeight(){
-  heightArea = 10;
   if (ball.posY <= ball.fallStartHeight && 
-    ball.direction < 0) return true;
+    ball.direction < 0 ) return true;
   return false;
 }
 
@@ -42,13 +41,13 @@ function placeBall() {
   ball.object.style.top = ball.posY + "px";
 }
 
-function changeDirection(){
+function changeBallDirection(){
   ball.direction *= -1;
   ball.fallStartHeight = field.bottomBorder - (field.bottomBorder - ball.fallStartHeight) * 2 / 3;
 }
 
 
-function increaseCurrentSpeed() {
+function changeBallCurrentSpeed() {
   if (!ball.fallState) {
     ball.fallStartHeight = ball.posY;
     ball.fallState = true;
@@ -57,40 +56,47 @@ function increaseCurrentSpeed() {
   tempTime = new Date();
   deltaTime = new Date(+tempTime - ball.fallStartTime).getMilliseconds();
   ball.currentSpeed += (ball.direction * 10 * deltaTime) / 1000;
+  if (ball.currentSpeed < 0) ball.currentSpeed = 0;
 }
 
-function deltaClause(){
+function deltaHeightAndBorderClause(){
   return (field.bottomBorder - ball.fallStartHeight <= parseInt(ball.ballCompStyle.width));
 }
 
+function mainRender(){
+  ball.speed = parseInt(document.getElementById("ballSpeed").value);
+  ball.frequency = parseInt(document.getElementById("frameFrequency").value);
+  fallingGravitation();
+}
+
 function fallingGravitation() {
-  if(isBallNearGround() && deltaClause()){
+  if(isBallNearGround() && deltaHeightAndBorderClause()){
     ball.fallState = false;
     ball.currentSpeed = ball.speed;
     ball.direction = 1;
   }
   else{
     if(ball.fallState && isBallNearGround()){
-      changeDirection();
+      changeBallDirection();
     }
     else
     if(ball.fallState && isBallNearBounceHeight()){
-      changeDirection();
+      changeBallDirection();
       ball.fallStartTime = new Date();
-      ball.currentSpeed = 0;
+      ball.currentSpeed = ball.speed;
     }
-    increaseCurrentSpeed();
+    changeBallCurrentSpeed();
     ball.posY += ball.direction * ball.currentSpeed;
     if (ball.posY >= field.bottomBorder) ball.posY = field.bottomBorder;
     placeBall();
   }
-  /* console.log("===========================")
+  console.log("===========================")
   console.log("speed", ball.currentSpeed);
   console.log("direction", ball.direction);
   console.log("ball fall state", ball.fallState);
   console.log("bounce height", ball.fallStartHeight);
   console.log("current height", ball.posY);
-  console.log("delta", field.bottomBorder - ball.fallStartHeight); */
+  console.log("delta", field.bottomBorder - ball.fallStartHeight);
 }
 
 function initFieldBorders() {
@@ -109,6 +115,12 @@ function initFieldBorders() {
 function initBallPosition() {
   ball.posX = parseInt(ball.ballCompStyle.left);
   ball.posY = parseInt(ball.ballCompStyle.top);
+  ball['eventTimer'] = setInterval(mainRender, ball.frequency);
+}
+
+function initFormInputs(){
+  document.getElementById("ballSpeed").value = ball.speed;
+  document.getElementById("frameFrequency").value = ball.frequency;
 }
 
 function moveBallByMouse(event){
@@ -123,37 +135,39 @@ function moveBallByMouse(event){
   placeBall();
 }
 
-function ballMouseDown(event){
+function ballMouseDownEvent(event){
   ball.mousedown = true;
   ball.shiftX = event.clientX - ball.posX;
   ball.shiftY = event.clientY - ball.posY;
   moveBallByMouse(event);
   placeBall();
-  document.addEventListener('mousemove', ballMouseMove);
-  clearInterval(eventTimer);
+  document.addEventListener('mousemove', ballMouseMoveEvent);
+  clearInterval(ball.eventTimer);
 }
 
-function ballMouseMove(event){
+function ballMouseMoveEvent(event){
   if (ball.mousedown) moveBallByMouse(event);
 }
 
-function ballMouseUp(event){
-  document.removeEventListener('mousemove', ballMouseMove);
-  ball.mousedown = false;
-  ball.direction = 1;
-  ball.currentSpeed = ball.speed;
-  eventTimer = setInterval(fallingGravitation, ball.frequency);
+function ballMouseUpEvent(event){
+  if(ball.mousedown){
+    document.removeEventListener('mousemove', ballMouseMoveEvent);
+    ball.mousedown = false;
+    ball.direction = 1;
+    ball.currentSpeed = ball.speed;
+    ball.eventTimer = setInterval(mainRender, ball.frequency);
+  }
 }
 
-ball.object.addEventListener('mousedown', ballMouseDown);
-document.addEventListener('mouseup', ballMouseUp);
+ball.object.addEventListener('mousedown', ballMouseDownEvent);
+document.addEventListener('mouseup', ballMouseUpEvent);
 
 
 initBallPosition();
 initFieldBorders();
-let eventTimer = setInterval(fallingGravitation, ball.frequency);
+initFormInputs();
+
 
 /*
-    табличка со значениями
     внешние объекты
 */

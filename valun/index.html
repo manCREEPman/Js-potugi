@@ -9,6 +9,20 @@
 
   <body>
     <div class="screen-field">
+      <div class="settings-form">
+        <div class="text-form">
+          <input class="text-form" type="range" id="ballSpeed" name="ballSpeed"
+                 min="10" max="200" value="10" step="10">
+          <label class="text-form" for="ballSpeed">Скорость мяча</label>
+        </div>
+        
+        <div class="text-form">
+          <input class="text-form" type="range" id="frameFrequency" name="frameFrequency" 
+                 min="10" max="1000" value="100" step="10">
+          <label class="text-form" for="frameFrequency">Частота обработки событий</label>
+        </div>
+      </div>
+      
       <div class="ball"></div>
     </div>
   </body>

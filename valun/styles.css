@@ -23,3 +23,11 @@
   height: 50px;
   border-radius: 50%;
 }
+
+.settings-form {
+  float: right;
+}
+
+.text-form {
+  user-select: none;
+}
