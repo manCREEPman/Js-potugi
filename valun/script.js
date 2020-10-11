@@ -21,14 +21,11 @@ const field = {
 };
 
 function isBallNearGround() {
-  if (ball.posY >= field.bottomBorder) return true;
-  else return false;
+  return (ball.posY >= field.bottomBorder);
 }
 
 function isBallNearBounceHeight(){
-  if (ball.posY <= ball.fallStartHeight && 
-    ball.direction < 0 ) return true;
-  return false;
+  return (ball.posY <= ball.fallStartHeight && ball.direction < 0 );
 }
 
 function changeBallCoords(x, y) {
@@ -59,6 +56,10 @@ function changeBallCurrentSpeed() {
   if (ball.currentSpeed < 0) ball.currentSpeed = 0;
 }
 
+function zeroBallSpeed(){
+  return (ball.direction < 0 && ball.currentSpeed == 0);
+}
+
 function deltaHeightAndBorderClause(){
   return (field.bottomBorder - ball.fallStartHeight <= parseInt(ball.ballCompStyle.width));
 }
@@ -76,7 +77,7 @@ function fallingGravitation() {
     ball.direction = 1;
   }
   else{
-    if(ball.fallState && isBallNearGround()){
+    if((ball.fallState && isBallNearGround()) || zeroBallSpeed()){
       changeBallDirection();
     }
     else
