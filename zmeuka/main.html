@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Змейка</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Приветствие -->
+    <div class="screen">
+        <div class="main-block left-float">
+            <div>
+                <div class="header">Добро пожаловать!</div>
+                <div class="block-content">
+                    <label class="centred-text" for="nickname-edit">Ваше имя</label>
+                    <input  name="nickname-edit" type="text">
+                </div>
+            </div>
+            <!-- Настройки игры -->
+            <div>
+                <div class="header">Настройки игры</div>
+                <div class="block-content">
+                    <div class="centred-text">Поле</div>
+        
+                    <label for="cell-size">Размер клеток</label> <br>
+                    <input type="range" name="cell-size"> <br>
+        
+                    <label for="field-length">Ширина поля</label> <br>
+                    <input type="range" name="field-length"> <br>
+        
+                    <div class="centred-text">Появление яблок</div>
+                    <div class="block-radio">
+                        <div class="left-float">
+                            <input type="radio" name="choose-mode">
+                            <label for="after-current">Новое после текущего</label> <br>
+                        </div> 
+                        <div class="left-float">
+                            <input type="radio" name="choose-mode">
+                            <label for="spawn-frequency">Частота появления</label> <br>
+                        </div>
+                        
+                    </div>
+                    <div class="start-button"><p>Начать</p></div>
+                </div>
+                
+            </div>
+        </div>
+        <!-- Рекорды -->
+        <div class="records-block left-float">
+            <div class="header">Рекорды</div>
+            <div>
+                <ol>
+                    <li class="nickname">SunflameSonSinMami <span class="points">10000</span></li>
+                    <li class="nickname">Electro <span class="points">9000</span></li>
+                    <li class="nickname">StrickenMaple05 <span class="points">8700</span></li>
+                </ol>
+            </div>
+        </div>
+    </div>    
+</body>
+</html>

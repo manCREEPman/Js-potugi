@@ -1,0 +1,86 @@
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  width: 100%;
+  text-align: center;
+  font-family: "Ubuntu", sans-serif;
+}
+
+.screen {
+  max-width: 1140px;
+  margin: 0 calc((100% - 1024px) / 2);
+}
+
+.screen::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.left-float {
+  float: left;
+}
+
+.block-content {
+  margin: auto 0;
+  background-color: #abe079;
+}
+
+.centred-text {
+  display: block;
+  margin: 0 auto;
+  padding: 5px 0;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.header {
+  background-color: #f57c35;
+}
+
+.block-radio {
+  width: 190px;
+  margin: 0 auto;
+}
+
+.nickname {
+  font-style: italic;
+  color: #37abe0;
+}
+
+.points {
+  font-style: normal;
+  font-weight: bold;
+  color: #000000;
+}
+
+.block-radio::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.main-block {
+  width: calc(8 * (100% - 10px * 12) / 12);
+}
+
+.records-block {
+  width: calc(4 * (100% - 10px * 12) / 12);
+  height: 100%;
+  background-color: #f3e98c;
+}
+
+ol li {
+  margin-left: 19px;
+}
+
+li::marker {
+  font-style: normal;
+  color: #000000;
+}
